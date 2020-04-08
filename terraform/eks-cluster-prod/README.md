@@ -1,4 +1,4 @@
-# Terraform scripts to create a Kuberentes dev cluster
+# Terraform scripts to create a Kuberentes prod cluster
 
 Values you may change:
 - `cluster name` in `variables.tf`
