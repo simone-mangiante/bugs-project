@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script type="text/javascript">
+    function sendJSON(){            
+        let result = document.querySelector('.result'); 
+        let user = document.querySelector('#user'); 
+        let description = document.querySelector('#description'); 
+           
+        // creating a XHR object 
+        let xhr = new XMLHttpRequest(); 
+        let url = "/api/bugs"; 
+
+        // open a connection 
+        xhr.open("POST", url, true); 
+
+        // set the request header i.e. which type of content you are sending 
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+
+        // create a state change callback 
+        xhr.onreadystatechange = function () { 
+            if (xhr.readyState === 4) { 
+
+                // print received data from server 
+                result.innerHTML = this.responseText; 
+
+            } 
+        }; 
+
+        // converting JSON data to string 
+        var data = JSON.stringify({ "user": user.value, "description": description.value }); 
+
+        // sending data with the request 
+        xhr.send(data); 
+    } 
+</script>
+
+{% if env == 'dev' %}
+  <h1 style="color:red;">Dev environment!</h1>
+{% endif %}
+
+<h2>Enter a new bug</h2>
+
+<p> 
+  <!-- Making a text input -->
+  <input type="text" id="user" placeholder="User name"> 
+  <input type="text" id="description" placeholder="Description" size="100"> 
+    
+  <!-- Button to send data -->
+  <button onclick="sendJSON()">Create</button> 
+
+  <!-- For printing result from server -->
+  <p class="result"></p> 
+</p>
+
+<hr/>
+
+<h2>List of recorded bugs</h2>
+
+{% if bugs %}
+  <table width="100%" border="1">
+    <tr>
+      <th align="left">ID</th>
+      <th align="left">Time</th>
+      <th align="left">User</th> 
+      <th align="left">Description</th>
+    </tr>
+    {% for bug in bugs %}
+      <tr>
+        <td>{{bug['id']}}</td>
+        <td>{{bug['timestamp']}}</td>
+        <td>{{bug['user']}}</td>
+        <td>{{bug['description']}}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% else %}
+  <p> No bugs recorded yet. </p>
+{% endif %}
+
+</body>
+</html>

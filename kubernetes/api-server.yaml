@@ -1,0 +1,44 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: api-server
+  namespace: bugs
+spec:
+  selector:
+    matchLabels:
+      app: api-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: api-server
+    spec:
+      containers:
+      - name: api-server
+        image: 086864650423.dkr.ecr.us-east-1.amazonaws.com/bar:latest
+        imagePullPolicy: Always
+        env:
+        - name: BUGS_ENV
+          value: "dev"
+        - name: REDIS_HOST
+          value: "redis-svc"
+        ports:
+        - containerPort: 80
+          name: api-server-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-server-svc
+  namespace: bugs 
+  labels:
+    app: api-server
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: api-server-port 
+    name: api-server-svc-port
+  selector:
+    app: api-server
