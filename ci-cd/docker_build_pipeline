@@ -1,0 +1,15 @@
+pipeline {
+  environment {
+    registry = <ECR URN>
+    registryCredential = <to be configured>
+  }
+  agent any  stages {
+    stage('Building image') {
+      steps{
+        script {
+          docker.build registry + ":$BUILD_NUMBER"
+        }
+      }
+    }
+  }
+}

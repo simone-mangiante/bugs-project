@@ -1,0 +1,7 @@
+node {
+  stage('Apply Kubernetes files') {
+    withKubeConfig([credentialsId: <to be configured>, serverUrl: <EKS cluster URL>]) {
+      sh 'kubectl apply -f kubernetes-directory
+    }
+  }
+}
