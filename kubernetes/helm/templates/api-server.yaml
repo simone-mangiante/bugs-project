@@ -2,12 +2,11 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: api-server
-  namespace: bugs
 spec:
   selector:
     matchLabels:
       app: api-server
-  replicas: 1
+  replicas: {{ .Values.apiServer.replicaCount }}
   template:
     metadata:
       labels:
@@ -15,13 +14,13 @@ spec:
     spec:
       containers:
       - name: api-server
-        image: image-name  # put image name here
+        image: {{ .Values.apiServer.image }}
         imagePullPolicy: Always
         env:
         - name: BUGS_ENV
-          value: "dev"  # change to deployment environment accordingly
+          value: {{ quote .Values.environment }}
         - name: REDIS_HOST
-          value: "redis-svc"
+          value: {{ quote .Values.database.host }}
         ports:
         - containerPort: 80
           name: api-server-port

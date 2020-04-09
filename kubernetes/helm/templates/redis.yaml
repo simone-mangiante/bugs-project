@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  replicas: {{ .Values.database.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.databse.port }}
+          name: redis-port
+        volumeMounts:
+        - name: redis-volume
+          mountPath: /data
+      volumes:
+        - name: redis-volume
+          persistentVolumeClaim:
+            # Name of the PVC created earlier
+            claimName: redis-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # This name uniquely identifies the PVC. This is used in deployment.
+  name: redis-pv-claim
+  namespace: bugs
+spec:
+  storageClassName: gp2
+  # Read more about access modes here: http://kubernetes.io/docs/user-guide/persistent-volumes/#access-modes
+  accessModes:
+    # The volume is mounted as read-write by a single node
+    - ReadWriteOnce
+  resources:
+    # This is the request for storage. Should be available in the cluster.
+    requests:
+      storage: {{ .Values.database.storage }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.database.host }}
+  namespace: bugs 
+  labels:
+    app: redis 
+spec:
+  ports:
+  - port: {{ .Values.database.port }}
+    protocol: TCP
+    targetPort: redis-port 
+    name: redis-svc-port
+  selector:
+    app: redis

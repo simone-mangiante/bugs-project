@@ -1,0 +1,15 @@
+# Default values for bugs-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+environemnt: dev
+
+apiServer:
+  image: <aws-ecr>/api-server  # put AWS ECR URN here
+  replicaCount: 1
+
+database:
+  host: redis-svc
+  port: 6379
+  replicaCount: 1
+  storage: 1Gi
