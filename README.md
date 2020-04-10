@@ -37,7 +37,7 @@ Move to the right folder: `cd terraform/ecr`
 Execute the script (inspired by [this](https://www.terraform.io/docs/providers/aws/r/ecr_repository.html):
 `terraform init` then `terraform apply`
 
-At this point you'll have a new ECR called `bugs`. The URN for this repository will be saved as the terraform output variable `ecr_arn`.
+At this point you'll have a new ECR called `bugs`. The ARN for this repository will be saved as the terraform output variable `ecr_arn`.
 To retrieve it: `terraform output ecr_arn`
 
 You need `docker` to login into it by following [this guide](https://docs.aws.amazon.com/AmazonECR/latest/userguide/Registries.html) 
@@ -72,8 +72,8 @@ Build the custom docker image: `docker build -t <image_name> .`
 
 Tag and push the image to your ECR:
 ```
-docker tag <image_id> <ECR_URN>/<image_name>
-docker push <ECR_URN>/<image_name>
+docker tag <image_id> <ECR_ARN>/<image_name>
+docker push <ECR_ARN>/<image_name>
 ```
 
 ## 3. Deploy everything

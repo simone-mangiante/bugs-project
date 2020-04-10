@@ -5,7 +5,7 @@
 environemnt: dev
 
 apiServer:
-  image: <aws-ecr>/api-server  # put AWS ECR URN here
+  image: <aws-ecr>/api-server  # put AWS ECR ARN here
   replicaCount: 1
 
 database:
